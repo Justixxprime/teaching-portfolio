@@ -144,17 +144,26 @@
 .theme-toggle-btn {
   width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
   border: 1px solid var(--line); background: var(--surface); border-radius: 50%; cursor: pointer;
-  transition: border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+  transition: border-color var(--dur-fast) var(--ease), transform 500ms var(--ease), box-shadow var(--dur-fast) var(--ease);
 }
-.theme-toggle-btn:hover { transform: rotate(20deg); border-color: var(--teal); }
-.theme-toggle-btn svg { width: 17px; height: 17px; stroke: var(--ink); }
+.theme-toggle-btn:hover { transform: rotate(50deg) scale(1.08); border-color: var(--teal); box-shadow: 0 6px 18px -8px rgba(20,16,10,0.3); }
+.theme-toggle-btn:active { transform: rotate(50deg) scale(0.94); }
+.theme-toggle-btn svg { width: 17px; height: 17px; stroke: var(--ink); transition: stroke var(--dur-fast) var(--ease); }
 .theme-label {
-  position: absolute; top: calc(100% + 10px); right: 0; white-space: nowrap;
-  background: var(--ink); color: var(--paper); font-size: 0.76rem; padding: 0.4em 0.7em; border-radius: var(--radius-sm);
-  opacity: 0; transform: translateY(-4px); pointer-events: none;
-  transition: opacity var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+  position: absolute; top: calc(100% + 12px); right: 0; white-space: nowrap;
+  background: var(--ink); color: var(--paper); font-size: 0.76rem; letter-spacing: 0.02em;
+  padding: 0.5em 0.85em; border-radius: var(--radius-sm);
+  opacity: 0; transform: translateY(-6px) scale(0.96); transform-origin: top right; pointer-events: none;
+  box-shadow: 0 12px 24px -10px rgba(20,16,10,0.35);
+  transition: opacity 320ms var(--ease), transform 320ms var(--ease);
 }
-.theme-toggle:hover .theme-label, .theme-toggle-btn:focus-visible ~ .theme-label { opacity: 1; transform: translateY(0); }
+.theme-label::before {
+  content: ""; position: absolute; top: -4px; right: 14px; width: 8px; height: 8px;
+  background: var(--ink); transform: rotate(45deg);
+}
+.theme-toggle:hover .theme-label, .theme-toggle-btn:focus-visible ~ .theme-label {
+  opacity: 1; transform: translateY(0) scale(1);
+}
 
 /* ---------------------------------------------------------
    CINEMATIC SEQUENCE — a documentary-style run of images with

@@ -107,12 +107,12 @@
   --gold:         #C79A5D;
 }
 
-:root[data-theme="dark"] .site-nav {
-  background: rgba(27, 33, 28, 0.86);
-}
+/* dark-mode nav background now lives on .site-nav::before in
+   base.css, since backdrop-filter can't sit directly on .site-nav
+   (see the note there) */
 
 /* smooth, not instant, when the theme changes */
 html { transition: background var(--dur-med) var(--ease); }
-body, .site-nav, .site-footer, .btn, .img-frame, .tile, input, textarea, select, .dropdown-panel {
+body, .site-nav::before, .site-footer, .btn, .img-frame, .tile, input, textarea, select, .dropdown-panel {
   transition: background var(--dur-med) var(--ease), color var(--dur-med) var(--ease), border-color var(--dur-med) var(--ease);
 }

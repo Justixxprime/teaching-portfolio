@@ -115,9 +115,26 @@ textarea:focus-visible, select:focus-visible {
 /* ---- Nav ---- */
 .site-nav {
   position: sticky; top: 0; z-index: 40;
+  border-bottom: 1px solid var(--line);
+  /* NOTE: backdrop-filter is intentionally NOT set directly on
+     .site-nav. Per the CSS spec, backdrop-filter (like transform
+     or filter) turns an element into the containing block for any
+     position:fixed descendants — and .nav-links (the mobile menu)
+     is fixed and lives inside this element. That combination was
+     the cause of the mobile menu bug: the menu was being fixed
+     relative to this 84px bar instead of the real viewport. The
+     frosted-glass blur is applied via ::before instead, which is
+     a separate generated box and doesn't create that trap. */
+  position: sticky;
+}
+.site-nav::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
   background: rgba(237, 230, 216, 0.92);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line);
+}
+:root[data-theme="dark"] .site-nav::before {
+  background: rgba(27, 33, 28, 0.86);
 }
 .site-nav .container {
   display: flex; align-items: center; justify-content: space-between;
