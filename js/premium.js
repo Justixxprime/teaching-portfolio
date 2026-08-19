@@ -1,4 +1,17 @@
 /* ============================================================
+   PAGE LOAD FADE-IN — soft entrance rather than a hard flash.
+   ============================================================ */
+window.addEventListener('load', function () {
+  requestAnimationFrame(function () {
+    document.body.classList.add('loaded');
+  });
+});
+// Fallback in case 'load' already fired before this script ran
+if (document.readyState === 'complete') {
+  document.body.classList.add('loaded');
+}
+
+/* ============================================================
    THEME: light / dark / auto
    Auto = follows system preference; if the browser also exposes
    the day/night via prefers-color-scheme that's respected live.
@@ -193,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
    GPU-friendly, respects prefers-reduced-motion via CSS.
    ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {
-  var targets = document.querySelectorAll('[data-reveal], .sequence-item');
+  var targets = document.querySelectorAll('[data-reveal], .sequence-item, .tile');
   if (!targets.length || !('IntersectionObserver' in window)) {
     targets.forEach(function (t) { t.classList.add('in-view'); });
     return;

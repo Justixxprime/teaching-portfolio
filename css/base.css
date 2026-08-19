@@ -140,13 +140,18 @@ textarea:focus-visible, select:focus-visible {
 @media (max-width: 900px) {
   .nav-links { position: fixed; inset: 84px 0 0 0; background: var(--paper); flex-direction: column;
     padding: var(--sp-5) var(--sp-4); gap: var(--sp-4); transform: translateY(-8px); opacity: 0;
-    pointer-events: none; transition: opacity var(--dur-med) var(--ease), transform var(--dur-med) var(--ease); }
+    pointer-events: none; transition: opacity var(--dur-med) var(--ease), transform var(--dur-med) var(--ease);
+    overflow-y: auto; }
   .nav-links.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
   .nav-links a { font-size: 1.3rem; }
+  .nav-cta { gap: var(--sp-2); }
   .nav-cta .btn-ghost { display: none; }
+  .nav-mobile-cta { display: block; margin-top: var(--sp-2); }
+  .nav-mobile-cta .btn { width: 100%; justify-content: center; }
+  .theme-label { display: none; }
   .nav-toggle {
     display: block; background: none; border: none; cursor: pointer;
-    width: 32px; height: 22px; position: relative;
+    width: 32px; height: 22px; position: relative; flex: none;
   }
   .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after {
     content: ""; display: block; position: absolute; left: 0; width: 100%; height: 1px; background: var(--ink);
@@ -159,6 +164,16 @@ textarea:focus-visible, select:focus-visible {
   .nav-toggle[aria-expanded="true"] span::before { transform: translateY(8px) rotate(45deg); }
   .nav-toggle[aria-expanded="true"] span::after { transform: translateY(-8px) rotate(-45deg); }
 }
+
+@media (max-width: 380px) {
+  .brand { font-size: 1.05rem; }
+  .nav-cta { gap: 6px; }
+}
+
+/* Private Portfolio button duplicated inside the mobile slide-out
+   panel (as the last item in nav-links) — hidden on desktop,
+   where the real one already lives in the top bar instead. */
+.nav-mobile-cta { display: none; list-style: none; }
 
 /* ---- Footer ---- */
 .site-footer { background: var(--dusk); color: var(--dusk-ink); padding: var(--sp-6) 0 var(--sp-4); }
@@ -174,14 +189,14 @@ textarea:focus-visible, select:focus-visible {
 }
 @media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 
-/* ---- Placeholder marker: obvious, never silently invented ---- */
-.ph {
-  background: repeating-linear-gradient(135deg, rgba(169,130,79,0.15), rgba(169,130,79,0.15) 6px, rgba(169,130,79,0.05) 6px, rgba(169,130,79,0.05) 12px);
-  border: 1px dashed var(--gold);
-  padding: 0.05em 0.5em;
-  border-radius: var(--radius-sm);
-  font-style: italic;
-}
+/* ---- Draft-copy marker: invisible to visitors, but easy for
+   Justice to find later via the "ph" class in the code. No
+   visual treatment on purpose, so the site reads as finished. ---- */
+.ph { /* intentionally unstyled */ }
+
+/* ---- Utility: scroll-margin so anchored/scrolled-to fields land
+   below the sticky nav rather than under it. ---- */
+.field, section[id] { scroll-margin-top: 110px; }
 
 /* ---- Skip link ---- */
 .skip-link {
