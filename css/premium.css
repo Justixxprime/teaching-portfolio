@@ -1,0 +1,163 @@
+/* ============================================================
+   PREMIUM INTERACTION LAYER
+   Nav dropdowns, buttons, custom selects, accordions, theme toggle.
+   Everything here respects prefers-reduced-motion (see tokens.css).
+   ============================================================ */
+
+/* ---------------------------------------------------------
+   NAV: restructured into grouped dropdowns so it never feels
+   cramped. Top level: About, Approach, Work▾, Evidence▾, Contact.
+   --------------------------------------------------------- */
+.nav-links { align-items: center; }
+.nav-item-drop { position: relative; }
+.nav-drop-trigger {
+  background: none; border: none; font: inherit; color: inherit; cursor: pointer;
+  display: flex; align-items: center; gap: 0.4em;
+  font-size: 0.92rem; font-weight: 500; padding: 0.3em 0;
+}
+.nav-drop-trigger .chev {
+  width: 9px; height: 9px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg); margin-top: -3px; transition: transform var(--dur-fast) var(--ease);
+}
+.nav-item-drop[data-open="true"] .chev { transform: rotate(-135deg); margin-top: 3px; }
+
+.dropdown-panel {
+  position: absolute; top: calc(100% + 14px); left: 50%; transform: translate(-50%, -8px);
+  min-width: 300px; background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 20px 40px -18px rgba(20, 16, 10, 0.28);
+  padding: var(--sp-2); opacity: 0; pointer-events: none;
+  transition: opacity var(--dur-med) var(--ease), transform var(--dur-med) var(--ease);
+  z-index: 50;
+}
+.nav-item-drop[data-open="true"] .dropdown-panel {
+  opacity: 1; pointer-events: auto; transform: translate(-50%, 0);
+}
+.dropdown-panel a {
+  display: flex; flex-direction: column; gap: 2px;
+  text-decoration: none; padding: 0.7em 0.9em; border-radius: var(--radius-sm);
+  transition: background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
+}
+.dropdown-panel a:hover, .dropdown-panel a:focus-visible { background: var(--paper-deep); transform: translateX(3px); }
+.dropdown-panel a strong { font-family: var(--font-display); font-weight: 500; font-size: 1rem; }
+.dropdown-panel a span { font-size: 0.8rem; color: var(--ink-soft); }
+.nav-item-drop[data-open="true"] .dropdown-panel a {
+  animation: dropdown-item-in var(--dur-med) var(--ease) both;
+}
+.nav-item-drop[data-open="true"] .dropdown-panel a:nth-child(2) { animation-delay: 40ms; }
+.nav-item-drop[data-open="true"] .dropdown-panel a:nth-child(3) { animation-delay: 80ms; }
+.nav-item-drop[data-open="true"] .dropdown-panel a:nth-child(4) { animation-delay: 120ms; }
+@keyframes dropdown-item-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .dropdown-panel { position: static; transform: none !important; opacity: 1; pointer-events: auto;
+    max-height: 0; overflow: hidden; border: none; box-shadow: none; padding: 0; min-width: 0;
+    transition: max-height var(--dur-med) var(--ease); }
+  .nav-item-drop[data-open="true"] .dropdown-panel { max-height: 480px; padding: var(--sp-1) 0 var(--sp-2) var(--sp-3); }
+  .nav-drop-trigger { font-size: 1.3rem; width: 100%; justify-content: space-between; }
+}
+
+/* ---------------------------------------------------------
+   BUTTONS: refined hover — a soft directional shine and a
+   gentle lift, not a bounce. Arrow (if present) nudges forward.
+   --------------------------------------------------------- */
+.btn {
+  position: relative; overflow: hidden;
+  transition: transform var(--dur-med) var(--ease), box-shadow var(--dur-med) var(--ease), background var(--dur-fast) var(--ease);
+}
+.btn::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.16) 45%, transparent 70%);
+  transform: translateX(-120%); transition: transform var(--dur-med) var(--ease);
+}
+.btn:hover::before { transform: translateX(120%); }
+.btn:hover { box-shadow: 0 14px 28px -14px rgba(20,16,10,0.35); }
+.btn:active { transform: translateY(0) scale(0.98); }
+.btn .arrow { display: inline-block; transition: transform var(--dur-fast) var(--ease); }
+.btn:hover .arrow { transform: translateX(4px); }
+
+/* ---------------------------------------------------------
+   CUSTOM DROPDOWN (replaces native <select> visually)
+   Fully keyboard operable: Enter/Space open, Arrow keys move,
+   Enter selects, Escape closes. Only one open at a time,
+   enforced in js/premium.js.
+   --------------------------------------------------------- */
+.xselect { position: relative; }
+.xselect-trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-body); font-size: 1rem; text-align: left;
+  padding: 0.85em 1em; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+.xselect-trigger[data-placeholder="true"] { color: var(--ink-soft); }
+.xselect-trigger:focus-visible, .xselect[data-open="true"] .xselect-trigger { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(78,107,98,0.15); }
+.xselect-trigger .chev { width: 9px; height: 9px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); transition: transform var(--dur-fast) var(--ease); }
+.xselect[data-open="true"] .xselect-trigger .chev { transform: rotate(-135deg); }
+
+.xselect-panel {
+  position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 20px 40px -18px rgba(20,16,10,0.3);
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height var(--dur-med) var(--ease), opacity var(--dur-fast) var(--ease);
+  z-index: 30; padding: 0 0.3em;
+}
+.xselect[data-open="true"] .xselect-panel { max-height: 320px; opacity: 1; padding: 0.3em; overflow-y: auto; }
+.xselect-option {
+  display: block; width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  font-family: var(--font-body); font-size: 0.98rem; padding: 0.75em 0.8em; border-radius: var(--radius-sm);
+  color: var(--ink);
+}
+.xselect-option:hover, .xselect-option.active { background: var(--paper-deep); }
+.xselect-option[aria-selected="true"] { color: var(--teal-deep); font-weight: 600; }
+
+/* ---------------------------------------------------------
+   ACCORDION (FAQ + anywhere else): pure CSS height animation
+   via grid-template-rows, single-open enforced by JS toggling
+   the "open" class and closing siblings in the same group.
+   --------------------------------------------------------- */
+.accordion-item { border-bottom: 1px solid var(--line); }
+.accordion-trigger {
+  width: 100%; display: flex; justify-content: space-between; align-items: center; gap: var(--sp-3);
+  background: none; border: none; text-align: left; cursor: pointer;
+  padding: var(--sp-3) 0; font-family: var(--font-display); font-size: 1.15rem; color: var(--ink);
+}
+.accordion-trigger .plus { position: relative; width: 16px; height: 16px; flex: none; }
+.accordion-trigger .plus::before, .accordion-trigger .plus::after {
+  content: ""; position: absolute; background: var(--ink); transition: transform var(--dur-med) var(--ease);
+}
+.accordion-trigger .plus::before { left: 0; top: 50%; width: 100%; height: 1.5px; transform: translateY(-50%); }
+.accordion-trigger .plus::after { top: 0; left: 50%; height: 100%; width: 1.5px; transform: translateX(-50%); }
+.accordion-item.open .accordion-trigger .plus::after { transform: translateX(-50%) rotate(90deg); opacity: 0; }
+.accordion-body-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--dur-med) var(--ease); }
+.accordion-item.open .accordion-body-wrap { grid-template-rows: 1fr; }
+.accordion-body { overflow: hidden; }
+.accordion-body p { padding-bottom: var(--sp-3); max-width: 60ch; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------
+   THEME TOGGLE: sun / moon / auto, with a hover label.
+   --------------------------------------------------------- */
+.theme-toggle { position: relative; display: flex; align-items: center; }
+.theme-toggle-btn {
+  width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); background: var(--surface); border-radius: 50%; cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.theme-toggle-btn:hover { transform: rotate(20deg); border-color: var(--teal); }
+.theme-toggle-btn svg { width: 17px; height: 17px; stroke: var(--ink); }
+.theme-label {
+  position: absolute; top: calc(100% + 10px); right: 0; white-space: nowrap;
+  background: var(--ink); color: var(--paper); font-size: 0.76rem; padding: 0.4em 0.7em; border-radius: var(--radius-sm);
+  opacity: 0; transform: translateY(-4px); pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.theme-toggle:hover .theme-label, .theme-toggle-btn:focus-visible ~ .theme-label { opacity: 1; transform: translateY(0); }
+
+/* ---------------------------------------------------------
+   Utility: scroll-margin so anchored/scrolled-to fields land
+   below the sticky nav rather than under it.
+   --------------------------------------------------------- */
+.field, section[id] { scroll-margin-top: 110px; }

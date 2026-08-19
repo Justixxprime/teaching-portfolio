@@ -1,0 +1,113 @@
+/* ============================================================
+   DESIGN TOKENS
+   Visual identity for [PRACTITIONER NAME]'s portfolio.
+
+   Direction: calm, warm, internationally credible. Built for
+   parents evaluating who will work with their child, not a
+   generic wellness/SaaS template.
+
+   Palette avoids the common "cream + terracotta" AI default —
+   instead: warm stone paper, deep clay ink, and a dusty teal
+   accent that reads as calm and trustworthy rather than trendy.
+
+   Signature motif: a thin "growth thread" line, used sparingly,
+   that marks milestones through the site the way a practitioner
+   would mark a child's progress. See .thread in components.css.
+   ============================================================ */
+
+:root {
+  /* ---- Color: core ---- */
+  --ink:          #2B2420;   /* primary text, warm near-black */
+  --ink-soft:     #55493F;   /* secondary text */
+  --paper:        #EDE6D8;   /* primary background, warm stone (not cream) */
+  --paper-deep:   #E3D9C6;   /* recessed sections */
+  --surface:      #F7F4EC;   /* cards / raised panels, lighter than paper */
+  --line:         #D7CBB4;   /* hairline borders */
+
+  /* ---- Color: dark section ---- */
+  --dusk:         #24302A;   /* deep section background, warm charcoal-green */
+  --dusk-ink:     #EDE6D8;   /* text on dusk */
+  --dusk-line:    #3C4A41;
+
+  /* ---- Color: accent ---- */
+  --teal:         #4E6B62;   /* dusty teal, primary accent */
+  --teal-deep:    #37493F;
+  --gold:         #A9824F;   /* warm gold, used sparingly for milestones */
+
+  /* ---- Typography ---- */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Work Sans', -apple-system, sans-serif;
+
+  --step-eyebrow:  0.75rem;
+  --step-body:     1.0625rem;
+  --step-lg:       1.375rem;
+  --step-h3:       clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
+  --step-h2:       clamp(2.1rem, 1.7rem + 1.8vw, 3.2rem);
+  --step-h1:       clamp(2.6rem, 1.9rem + 3.2vw, 5rem);
+
+  --tracking-wide: 0.14em;
+
+  /* ---- Spacing (8pt-ish, but a couple of deliberate breaks) ---- */
+  --sp-1: 0.5rem;
+  --sp-2: 1rem;
+  --sp-3: 1.5rem;
+  --sp-4: 2.5rem;
+  --sp-5: 4rem;
+  --sp-6: 6.5rem;
+  --sp-7: 9rem;
+
+  /* ---- Layout ---- */
+  --container: 1240px;
+  --container-narrow: 720px;
+
+  /* ---- Radius: used selectively, not everywhere ---- */
+  --radius-sm: 2px;
+  --radius-portrait: 4px 60px 4px 60px; /* organic, used only on portrait imagery */
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 180ms;
+  --dur-med: 420ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   DARK THEME
+   Same identity, inverted for low light: the warm stone becomes
+   a warm charcoal, the dusk sections become the "paper" plane.
+   Applied via [data-theme="dark"] on <html>, set by js/theme.js.
+   ============================================================ */
+:root[data-theme="dark"] {
+  --ink:          #EFE8D9;
+  --ink-soft:     #C9BDA6;
+  --paper:        #1B211C;
+  --paper-deep:   #141814;
+  --surface:      #212820;
+  --line:         #33392F;
+
+  --dusk:         #0F1310;
+  --dusk-ink:     #EFE8D9;
+  --dusk-line:    #262E24;
+
+  --teal:         #7FA095;
+  --teal-deep:    #A9C3B8;
+  --gold:         #C79A5D;
+}
+
+:root[data-theme="dark"] .site-nav {
+  background: rgba(27, 33, 28, 0.86);
+}
+
+/* smooth, not instant, when the theme changes */
+html { transition: background var(--dur-med) var(--ease); }
+body, .site-nav, .site-footer, .btn, .img-frame, .tile, input, textarea, select, .dropdown-panel {
+  transition: background var(--dur-med) var(--ease), color var(--dur-med) var(--ease), border-color var(--dur-med) var(--ease);
+}
