@@ -10,7 +10,7 @@
 <link rel="icon" href="assets/icons/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/components.css">
@@ -74,8 +74,19 @@
   </section>
 
   <section class="section">
-    <div class="container">
-      <div class="head-block"><p class="eyebrow">Categories</p></div>
+    <div class="container-narrow" style="text-align:center;" data-gate>
+      <div class="img-frame" style="aspect-ratio:16/9; margin-bottom: var(--sp-4);"><span>Secure access</span></div>
+      <form id="access-form" style="display:flex; flex-direction:column; gap: var(--sp-2); max-width:360px; margin:0 auto;">
+        <label for="access-password" style="text-align:left; font-size:0.85rem; font-weight:600;">Password</label>
+        <input type="password" id="access-password" required style="width:100%; padding:0.85em 1em; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius: var(--radius-sm);">
+        <button type="submit" class="btn" style="margin-top: var(--sp-2);"><span class="arrow">Sign in</span></button>
+        <div class="form-status" role="status" aria-live="polite" style="text-align:left;"></div>
+      </form>
+      <p style="margin-top: var(--sp-4); font-size:0.85rem; color: var(--ink-soft);">Test password right now: <strong>preview2026</strong>.</p>
+    </div>
+
+    <div class="container" data-gated hidden>
+      <div class="head-block" data-reveal><p class="eyebrow">Categories</p></div>
       <div class="tile-grid">
         <article class="tile">
           <div class="img-frame"><span>[INSERT IMAGE]</span></div>
@@ -154,5 +165,7 @@
 
 <script src="js/nav.js"></script>
 <script src="js/premium.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/access-gate.js"></script>
 </body>
 </html>

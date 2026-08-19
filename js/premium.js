@@ -188,8 +188,29 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* ============================================================
+   SCROLL REVEAL — [data-reveal] and .sequence-item fade/lift
+   into place the first time they enter the viewport. Cheap,
+   GPU-friendly, respects prefers-reduced-motion via CSS.
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  var targets = document.querySelectorAll('[data-reveal], .sequence-item');
+  if (!targets.length || !('IntersectionObserver' in window)) {
+    targets.forEach(function (t) { t.classList.add('in-view'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+  targets.forEach(function (t) { io.observe(t); });
+});
+
+/* ============================================================
    ACCORDION — single-open-at-a-time within each
-   [data-accordion-group], smooth via CSS grid-rows (no JS
    height math needed).
    ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {

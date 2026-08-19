@@ -34,9 +34,14 @@
   --teal-deep:    #37493F;
   --gold:         #A9824F;   /* warm gold, used sparingly for milestones */
 
-  /* ---- Typography ---- */
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body:    'Work Sans', -apple-system, sans-serif;
+  /* ---- Typography ----
+     All-serif system, no sans-serif anywhere on the site.
+     Display: Bodoni Moda — dramatic, high-contrast, editorial,
+     unmistakably premium rather than a generic default.
+     Body: Newsreader — a serif actually optimized for reading
+     comfort at small sizes, so long-form pages stay legible. */
+  --font-display: 'Bodoni Moda', 'Georgia', serif;
+  --font-body:    'Newsreader', Georgia, serif;
 
   --step-eyebrow:  0.75rem;
   --step-body:     1.0625rem;

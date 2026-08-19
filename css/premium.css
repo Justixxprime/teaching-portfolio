@@ -157,7 +157,56 @@
 .theme-toggle:hover .theme-label, .theme-toggle-btn:focus-visible ~ .theme-label { opacity: 1; transform: translateY(0); }
 
 /* ---------------------------------------------------------
+   CINEMATIC SEQUENCE — a documentary-style run of images with
+   numbered captions, each revealing as it scrolls into view.
+   Used for "the story of a session" style sections.
+   --------------------------------------------------------- */
+.sequence { display: flex; flex-direction: column; }
+.sequence-item {
+  display: grid; grid-template-columns: 90px 1fr; gap: var(--sp-4);
+  align-items: center; padding: var(--sp-5) 0;
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 900ms var(--ease), transform 900ms var(--ease);
+}
+.sequence-item.in-view { opacity: 1; transform: translateY(0); }
+.sequence-item:nth-child(even) { grid-template-columns: 1fr 90px; }
+.sequence-item:nth-child(even) .sequence-figure { order: 1; }
+.sequence-item:nth-child(even) .sequence-index { order: 2; }
+.sequence-index { font-family: var(--font-display); font-size: 1.6rem; color: var(--gold); text-align: center; }
+.sequence-figure .img-frame { aspect-ratio: 16/10; }
+.sequence-caption { margin-top: var(--sp-2); }
+.sequence-caption .eyebrow { display:block; margin-bottom: 0.4em; }
+.sequence-caption p { color: var(--ink-soft); max-width: 46ch; }
+@media (max-width: 700px) {
+  .sequence-item, .sequence-item:nth-child(even) { grid-template-columns: 48px 1fr; }
+}
+
+/* ---------------------------------------------------------
+   CINEMATIC FULL-BLEED — an almost-full-viewport photograph
+   with a single line of type in one corner. Used sparingly.
+   --------------------------------------------------------- */
+.cinematic-bleed {
+  position: relative; min-height: 82vh; display: flex; align-items: flex-end;
+  overflow: hidden;
+}
+.cinematic-bleed .img-frame { position: absolute; inset: 0; aspect-ratio: auto; border: none; }
+.cinematic-bleed-caption {
+  position: relative; z-index: 2; padding: var(--sp-5);
+  color: var(--dusk-ink); background: linear-gradient(0deg, rgba(15,19,16,0.55), transparent 60%);
+  width: 100%;
+}
+.cinematic-bleed-caption h2 { max-width: 20ch; color: var(--dusk-ink); }
+
+/* ---------------------------------------------------------
+   Scroll reveal (generic) — fades/lifts any [data-reveal] el
+   into place the first time it enters the viewport.
+   --------------------------------------------------------- */
+[data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 800ms var(--ease), transform 800ms var(--ease); }
+[data-reveal].in-view { opacity: 1; transform: translateY(0); }
+
+/* ---------------------------------------------------------
    Utility: scroll-margin so anchored/scrolled-to fields land
    below the sticky nav rather than under it.
    --------------------------------------------------------- */
 .field, section[id] { scroll-margin-top: 110px; }
+

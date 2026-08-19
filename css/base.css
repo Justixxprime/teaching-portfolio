@@ -18,13 +18,14 @@ a { color: inherit; }
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 500;
-  line-height: 1.08;
+  line-height: 1.05;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
+  font-style: normal;
 }
-h1 { font-size: var(--step-h1); font-weight: 400; }
-h2 { font-size: var(--step-h2); }
-h3 { font-size: var(--step-h3); }
+h1 { font-size: var(--step-h1); font-weight: 500; }
+h2 { font-size: var(--step-h2); font-weight: 500; }
+h3 { font-size: var(--step-h3); font-weight: 500; }
 p { margin: 0; }
 
 a:focus-visible, button:focus-visible, input:focus-visible,
