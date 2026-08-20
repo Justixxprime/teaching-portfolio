@@ -257,7 +257,19 @@ body.loaded { opacity: 1; transition: opacity 600ms var(--ease); }
 }
 .dropdown-panel a { position: relative; }
 .site-footer a.is-current { opacity: 1; text-decoration: underline; text-underline-offset: 4px; color: var(--gold); }
-.nav-mobile-cta a.is-current { background: var(--teal-deep); }
+
+/* Button-styled links (the mobile Private Portfolio CTA) get a
+   ring instead of a background/underline swap for "current page" —
+   this guarantees the button's own text/background colors (which
+   are known-good, used everywhere else on the site) are never
+   touched, so there's no way for the label to become unreadable. */
+.nav-links a.btn::after { display: none; }
+.nav-mobile-cta a.is-current {
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--gold);
+}
+:root[data-theme="dark"] .nav-mobile-cta a.is-current {
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--gold);
+}
 
 /* ---------------------------------------------------------
    SOCIAL ICONS (footer) — round, minimal, with a tooltip and a
@@ -339,3 +351,13 @@ body.loaded { opacity: 1; transition: opacity 600ms var(--ease); }
 .tile-cta .arrow { transition: transform 300ms var(--ease); }
 .tile-link:hover .tile-cta .arrow { transform: translateX(5px); }
 .tile-link:hover .tile-cta { color: var(--gold); }
+
+/* Hard guarantee: the mobile Private Portfolio button's own text
+   and background always resolve from the same theme-aware pair,
+   regardless of "current page" state or anything else touching
+   .btn elsewhere. Belt-and-braces against any future regression. */
+.nav-mobile-cta .btn {
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+  border-color: var(--ink) !important;
+}

@@ -4,6 +4,15 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* Removes the accidental "double tap to zoom" gesture on
+   interactive elements (a well-known mobile Safari/Chrome
+   behavior) without disabling pinch-to-zoom, which stays
+   available for accessibility. touch-action: manipulation tells
+   the browser this element only cares about pans/taps, not the
+   double-tap-zoom gesture specifically. */
+a, button, input, textarea, select, summary, [role="button"], .accordion-trigger, .gallery-filter, .nav-drop-trigger, .theme-toggle-btn, .tile-link {
+  touch-action: manipulation;
+}
 body {
   margin: 0;
   background: var(--paper);
@@ -12,6 +21,7 @@ body {
   font-size: var(--step-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  touch-action: manipulation; /* kills double-tap-zoom site-wide, pinch-zoom still works */
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
