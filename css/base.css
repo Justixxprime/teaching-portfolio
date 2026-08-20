@@ -154,6 +154,13 @@ textarea:focus-visible, select:focus-visible {
 .nav-cta { display: flex; align-items: center; gap: var(--sp-3); }
 .nav-toggle { display: none; }
 
+/* Private Portfolio button duplicated inside the mobile slide-out
+   panel (as the last item in nav-links) — hidden here by default
+   (desktop), overridden to display:block inside the mobile media
+   query below. This rule MUST come before the media query so the
+   mobile override actually wins at equal specificity. */
+.nav-mobile-cta { display: none; list-style: none; }
+
 @media (max-width: 900px) {
   .nav-links { position: fixed; inset: 84px 0 0 0; background: var(--paper); flex-direction: column;
     padding: var(--sp-5) var(--sp-4); gap: var(--sp-4); transform: translateY(-8px); opacity: 0;
@@ -186,11 +193,6 @@ textarea:focus-visible, select:focus-visible {
   .brand { font-size: 1.05rem; }
   .nav-cta { gap: 6px; }
 }
-
-/* Private Portfolio button duplicated inside the mobile slide-out
-   panel (as the last item in nav-links) — hidden on desktop,
-   where the real one already lives in the top bar instead. */
-.nav-mobile-cta { display: none; list-style: none; }
 
 /* ---- Footer ---- */
 .site-footer { background: var(--dusk); color: var(--dusk-ink); padding: var(--sp-6) 0 var(--sp-4); }

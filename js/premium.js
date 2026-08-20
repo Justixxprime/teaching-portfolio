@@ -12,29 +12,107 @@ if (document.readyState === 'complete') {
 }
 
 /* ============================================================
-   THEME: light / dark / auto
-   Auto = follows system preference; if the browser also exposes
-   the day/night via prefers-color-scheme that's respected live.
-   Manual choice is remembered in localStorage.
+   THEME: light / dark / auto / location
+   - light / dark: manual, fixed
+   - auto: follows the device's system preference, live
+   - location: asks for geolocation once, checks actual sunrise/
+     sunset at that location (via a free, keyless API), and
+     switches automatically. Falls back to local device time
+     (7am–7pm = light) if permission is denied or the API is
+     unreachable, so it never gets stuck.
+   Manual choice is remembered in localStorage. Switching themes
+   uses the View Transitions API for a soft circular reveal from
+   the toggle button, when the browser supports it; a plain
+   crossfade (already defined in tokens.css) is the fallback.
    ============================================================ */
 (function () {
-  var KEY = 'site-theme'; // 'light' | 'dark' | 'auto'
+  var KEY = 'site-theme'; // 'light' | 'dark' | 'auto' | 'location'
   var root = document.documentElement;
+  var MODES = ['auto', 'light', 'dark', 'location'];
+  var ICONS = {
+    light: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/>',
+    dark: '<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/>',
+    auto: '<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18Z" fill="currentColor" stroke="none"/>',
+    location: '<path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/>',
+  };
+  var LABELS = { light: 'Light', dark: 'Dark', auto: 'Auto', location: 'Location' };
 
   function systemPrefersDark() {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
-  function apply(mode) {
-    var resolved = mode === 'auto' ? (systemPrefersDark() ? 'dark' : 'light') : mode;
+  function localHourSaysDark() {
+    var h = new Date().getHours();
+    return h < 7 || h >= 19;
+  }
+
+  var locationResolvedDark = null; // cache once known, avoids refetching every click
+
+  function resolveLocationTheme(onReady) {
+    if (locationResolvedDark !== null) { onReady(locationResolvedDark); return; }
+    if (!('geolocation' in navigator)) { onReady(localHourSaysDark()); return; }
+
+    navigator.geolocation.getCurrentPosition(
+      function (pos) {
+        var lat = pos.coords.latitude, lng = pos.coords.longitude;
+        fetch('https://api.sunrise-sunset.org/json?lat=' + lat + '&lng=' + lng + '&formatted=0')
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            try {
+              var sunrise = new Date(data.results.sunrise);
+              var sunset = new Date(data.results.sunset);
+              var now = new Date();
+              var isDark = now < sunrise || now > sunset;
+              locationResolvedDark = isDark;
+              onReady(isDark);
+            } catch (e) {
+              onReady(localHourSaysDark());
+            }
+          })
+          .catch(function () { onReady(localHourSaysDark()); });
+      },
+      function () { onReady(localHourSaysDark()); },
+      { timeout: 6000 }
+    );
+  }
+
+  function paintIcon(mode) {
+    var svg = document.querySelector('.theme-toggle-btn svg');
+    if (!svg) return;
+    svg.innerHTML = ICONS[mode] || ICONS.auto;
+    svg.classList.remove('swap');
+    void svg.offsetWidth; // restart animation
+    svg.classList.add('swap');
+  }
+
+  function setLabel(mode, resolved) {
+    var label = document.querySelector('.theme-label');
+    if (!label) return;
+    var text = mode === 'light' || mode === 'dark'
+      ? 'Theme: ' + LABELS[mode]
+      : 'Theme: ' + LABELS[mode] + ' (' + resolved + ')';
+    label.textContent = text;
+  }
+
+  function paint(mode, resolved) {
     root.setAttribute('data-theme', resolved);
     root.setAttribute('data-theme-mode', mode);
     var btn = document.querySelector('.theme-toggle-btn');
-    var label = document.querySelector('.theme-label');
     if (btn) btn.setAttribute('data-mode', mode);
-    if (label) {
-      var text = mode === 'auto' ? 'Theme: Auto (' + resolved + ')' : mode === 'dark' ? 'Theme: Dark' : 'Theme: Light';
-      label.textContent = text;
+    paintIcon(mode === 'auto' || mode === 'location' ? resolved : mode);
+    setLabel(mode, resolved);
+  }
+
+  function apply(mode) {
+    if (mode === 'light' || mode === 'dark') {
+      paint(mode, mode);
+    } else if (mode === 'auto') {
+      paint(mode, systemPrefersDark() ? 'dark' : 'light');
+    } else if (mode === 'location') {
+      // Paint an immediate best-guess so there's no flash, then
+      // refine once geolocation/the API responds.
+      paint(mode, localHourSaysDark() ? 'dark' : 'light');
+      resolveLocationTheme(function (isDark) { paint(mode, isDark ? 'dark' : 'light'); });
     }
   }
 
@@ -55,19 +133,77 @@ if (document.readyState === 'complete') {
   document.addEventListener('DOMContentLoaded', function () {
     var btn = document.querySelector('.theme-toggle-btn');
     if (!btn) return;
-    btn.addEventListener('click', function () {
-      var order = ['auto', 'light', 'dark'];
-      var next = order[(order.indexOf(getStored()) + 1) % order.length];
+    btn.addEventListener('click', function (e) {
+      var next = MODES[(MODES.indexOf(getStored()) + 1) % MODES.length];
       store(next);
-      apply(next);
+
+      var doSwitch = function () { apply(next); };
+
+      if (document.startViewTransition) {
+        var rect = btn.getBoundingClientRect();
+        var x = rect.left + rect.width / 2, y = rect.top + rect.height / 2;
+        var endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+        var transition = document.startViewTransition(doSwitch);
+        transition.ready.then(function () {
+          document.documentElement.animate(
+            { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + endRadius + 'px at ' + x + 'px ' + y + 'px)'] },
+            { duration: 650, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+          );
+        });
+      } else {
+        doSwitch();
+      }
     });
   });
 })();
 
 /* ============================================================
-   NAV DROPDOWNS — one open at a time, closes on outside click,
-   Escape, or when another opens.
+   PRIVATE GALLERY FILTERS — All / Photos / Videos / Notes
    ============================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  var filters = document.querySelectorAll('.gallery-filter');
+  if (!filters.length) return;
+  var tiles = document.querySelectorAll('.gallery-grid .tile');
+
+  filters.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      filters.forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('is-active');
+      btn.setAttribute('aria-selected', 'true');
+      var wanted = btn.getAttribute('data-filter');
+      tiles.forEach(function (tile) {
+        var show = wanted === 'all' || tile.getAttribute('data-category') === wanted;
+        tile.classList.toggle('is-hidden', !show);
+      });
+    });
+  });
+});
+
+/* ============================================================
+   ACTIVE PAGE HIGHLIGHT — nav, nav dropdowns, and footer links
+   all get marked to match whatever page is currently open. Done
+   in JS since the nav/footer markup is identical across every
+   page (see partials/), so this can't be hardcoded per page.
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  var here = location.pathname.split('/').pop() || 'index.html';
+  var links = document.querySelectorAll('.nav-links a, .dropdown-panel a, .site-footer a');
+  links.forEach(function (a) {
+    var href = a.getAttribute('href');
+    if (href === here) {
+      a.setAttribute('aria-current', 'page');
+      a.classList.add('is-current');
+    }
+  });
+  // If the current page lives inside a "Work" or "Evidence" dropdown,
+  // highlight that dropdown's trigger too, so the section reads as
+  // active even when collapsed.
+  document.querySelectorAll('.nav-item-drop').forEach(function (drop) {
+    if (drop.querySelector('.dropdown-panel a.is-current')) {
+      drop.querySelector('.nav-drop-trigger').classList.add('is-current');
+    }
+  });
+});
 document.addEventListener('DOMContentLoaded', function () {
   var drops = Array.prototype.slice.call(document.querySelectorAll('.nav-item-drop'));
 

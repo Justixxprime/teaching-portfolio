@@ -116,3 +116,22 @@ html { transition: background var(--dur-med) var(--ease); }
 body, .site-nav::before, .site-footer, .btn, .img-frame, .tile, input, textarea, select, .dropdown-panel {
   transition: background var(--dur-med) var(--ease), color var(--dur-med) var(--ease), border-color var(--dur-med) var(--ease);
 }
+
+/* ============================================================
+   VIEW TRANSITION (theme switch circular reveal)
+   The JS drives the actual clip-path animation; this just makes
+   sure the browser doesn't apply its own default crossfade on
+   top of it, which would look muddy layered with the circle.
+   ============================================================ */
+::view-transition-old(root), ::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root), ::view-transition-old(root), ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
