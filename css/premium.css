@@ -361,3 +361,23 @@ body.loaded { opacity: 1; transition: opacity 600ms var(--ease); }
   color: var(--paper) !important;
   border-color: var(--ink) !important;
 }
+
+/* ---------------------------------------------------------
+   VIDEO CARDS (private gallery) — hover previews a muted loop,
+   click opens a lightweight lightbox player.
+   --------------------------------------------------------- */
+.video-card { position: relative; cursor: pointer; background: #000; }
+.video-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
+.video-card:hover video { opacity: 1; }
+.video-lightbox {
+  position: fixed; inset: 0; background: rgba(10,8,6,0.92); z-index: 100;
+  display: flex; align-items: center; justify-content: center; padding: var(--sp-4);
+  opacity: 0; pointer-events: none; transition: opacity 300ms var(--ease);
+}
+.video-lightbox.open { opacity: 1; pointer-events: auto; }
+.video-lightbox video { max-width: min(900px, 92vw); max-height: 85vh; box-shadow: 0 30px 80px -20px rgba(0,0,0,0.6); }
+.video-lightbox-close {
+  position: absolute; top: var(--sp-3); right: var(--sp-3); width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+}

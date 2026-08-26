@@ -1,4 +1,38 @@
 /* ============================================================
+   VIDEO CARDS — hover preview + click-to-open lightbox
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  var cards = document.querySelectorAll('.video-card');
+  if (!cards.length) return;
+
+  var lightbox = document.createElement('div');
+  lightbox.className = 'video-lightbox';
+  lightbox.innerHTML = '<button class="video-lightbox-close" aria-label="Close">&times;</button><video controls playsinline></video>';
+  document.body.appendChild(lightbox);
+  var lbVideo = lightbox.querySelector('video');
+
+  function close() {
+    lightbox.classList.remove('open');
+    lbVideo.pause();
+    lbVideo.removeAttribute('src');
+  }
+  lightbox.querySelector('.video-lightbox-close').addEventListener('click', close);
+  lightbox.addEventListener('click', function (e) { if (e.target === lightbox) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+  cards.forEach(function (card) {
+    var previewVideo = card.querySelector('video');
+    card.addEventListener('mouseenter', function () { if (previewVideo) previewVideo.play().catch(function(){}); });
+    card.addEventListener('mouseleave', function () { if (previewVideo) previewVideo.pause(); });
+    card.addEventListener('click', function () {
+      lbVideo.src = card.getAttribute('data-video');
+      lightbox.classList.add('open');
+      lbVideo.play().catch(function(){});
+    });
+  });
+});
+
+/* ============================================================
    PAGE LOAD FADE-IN — soft entrance rather than a hard flash.
    ============================================================ */
 window.addEventListener('load', function () {
