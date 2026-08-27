@@ -1,4 +1,20 @@
 /* ============================================================
+   FLOATING WHATSAPP BUTTON — her own direct line, present on
+   every page. Injected via JS (not hardcoded per-page) so it's
+   guaranteed everywhere, including any pages added later.
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  var wrap = document.createElement('div');
+  wrap.className = 'wa-float';
+  wrap.innerHTML =
+    '<a href="https://wa.me/c/971543044578" target="_blank" rel="noopener" class="wa-float-btn" aria-label="Message Jennifer on WhatsApp">' +
+      '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 11.9a8.4 8.4 0 0 1-12.3 7.4L4 20.5l1.3-4a8.4 8.4 0 1 1 15.2-4.6Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.7 8.7c.2-.5.6-.5 1-.5h.4c.2 0 .4 0 .6.4.2.5.7 1.6.7 1.8.1.1.1.3 0 .5-.1.1-.1.3-.3.4l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.2 1.7 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.8.9-1 .2-.3.4-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.4.1.9-.1 1.3-.3.5-1.2.9-1.7 1-.5.1-1 .1-3.3-.7-2.8-1.1-4.6-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9 0-1.4.7-2 1-2.3Z"/></svg>' +
+    '</a>' +
+    '<span class="wa-float-label">Message Jennifer<br>on WhatsApp</span>';
+  document.body.appendChild(wrap);
+});
+
+/* ============================================================
    VIDEO CARDS — hover preview + click-to-open lightbox
    ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {
