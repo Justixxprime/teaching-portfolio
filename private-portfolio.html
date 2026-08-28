@@ -92,6 +92,7 @@
       <div class="head-block" style="margin: var(--sp-5) auto var(--sp-4); text-align:center;">
         <p class="eyebrow">You're in</p>
         <h2>Welcome back.</h2>
+        <a href="gallery-admin.html" class="link-underline" style="display:inline-block; margin-top:0.5em;">Manage gallery (add or remove items)</a>
       </div>
 
       <div class="gallery-filters" role="tablist" aria-label="Filter private gallery">
@@ -101,7 +102,7 @@
         <button class="gallery-filter" data-filter="notes" role="tab" aria-selected="false">Progress notes</button>
       </div>
 
-      <div class="tile-grid gallery-grid">
+      <div class="tile-grid gallery-grid" data-dynamic>
         <article class="tile" data-category="video">
           <div class="img-frame gallery-media video-card" data-video="assets/videos/session-fine-motor-practice.mp4">
             <video muted loop playsinline preload="metadata"><source src="assets/videos/session-fine-motor-practice.mp4#t=1" type="video/mp4"></video>
@@ -207,5 +208,7 @@
 <script src="js/premium.js"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/access-gate.js"></script>
+<script src="js/r2-config.js"></script>
+<script src="js/gallery.js"></script>
 </body>
 </html>

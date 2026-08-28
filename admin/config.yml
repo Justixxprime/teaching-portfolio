@@ -1,0 +1,35 @@
+# Decap CMS config for Jennifer's Insights articles.
+# See docs/decap-cms-setup-guide-for-justice.md for the one-time
+# GitHub OAuth setup this needs before it will work.
+
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME   # e.g. justixxprime/jennifer-amaka-site
+  branch: main
+  base_url: https://YOUR-OAUTH-PROXY.example.com   # from the setup guide, Step 3
+
+# Jennifer edits everything through a simple form — no code, no
+# markdown syntax to learn, just a title box, a category dropdown,
+# and a rich text editor (bold, headings, images all have buttons).
+media_folder: "assets/images/articles"
+public_folder: "assets/images/articles"
+
+collections:
+  - name: "articles"
+    label: "Insight Articles"
+    folder: "content/articles"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    identifier_field: "title"
+    summary: "{{title}} — {{category}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["Autism", "Down Syndrome", "Developmental Delay", "Learning Difficulties", "Approach", "Parents", "Getting Started"]
+      - { label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Short Description", name: "description", widget: "text", hint: "One or two sentences. Shown on the Insights page and used for search previews." }
+      - { label: "Article Body", name: "body", widget: "markdown" }

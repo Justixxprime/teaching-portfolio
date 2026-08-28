@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script data-theme-init>try{var m=localStorage.getItem("site-theme")||"auto";var d=m==="auto"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):m;document.documentElement.setAttribute("data-theme",d);}catch(e){}</script>
+<title>Manage Gallery | Jennifer Amaka</title>
+<meta name="description" content="Private upload panel for the gallery.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/icons/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/premium.css">
+<style>
+  .upload-drop {
+    border: 2px dashed var(--line); border-radius: var(--radius-sm); padding: var(--sp-5);
+    text-align: center; cursor: pointer; transition: border-color 250ms var(--ease), background 250ms var(--ease);
+  }
+  .upload-drop.drag-over { border-color: var(--teal); background: var(--surface); }
+  .upload-drop input[type="file"] { display: none; }
+  .manage-row {
+    display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .manage-row img, .manage-row video { width: 64px; height: 64px; object-fit: cover; border-radius: var(--radius-sm); flex: none; }
+  .manage-row .info { flex: 1; }
+  .manage-row .delete-btn {
+    font-size: 0.8rem; font-weight: 600; color: #8A3B2E; background: none; border: 1px solid #8A3B2E;
+    padding: 0.5em 1em; border-radius: var(--radius-sm); cursor: pointer;
+  }
+  .progress-bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: var(--sp-2); display: none; }
+  .progress-bar-fill { height: 100%; background: var(--teal); width: 0%; transition: width 200ms ease; }
+</style>
+</head>
+<body>
+<!-- NAV:START -->
+<a href="#main" class="skip-link">Skip to content</a>
+<nav class="site-nav" aria-label="Primary">
+  <div class="container">
+    <a href="index.html" class="brand">Jennifer Amaka</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="approach.html">Approach</a></li>
+
+      <li class="nav-item-drop" data-open="false">
+        <button class="nav-drop-trigger" aria-expanded="false" aria-haspopup="true">Work <span class="chev"></span></button>
+        <div class="dropdown-panel">
+          <a href="services.html"><strong>Services</strong><span>What she offers and how sessions work</span></a>
+          <a href="specialisms.html"><strong>Specialisms</strong><span>Autism, Down syndrome, developmental delay, learning support</span></a>
+          <a href="case-studies.html"><strong>Case Studies</strong><span>Anonymised, documented outcomes</span></a>
+          <a href="results.html"><strong>Results</strong><span>What progress looks like</span></a>
+        </div>
+      </li>
+
+      <li class="nav-item-drop" data-open="false">
+        <button class="nav-drop-trigger" aria-expanded="false" aria-haspopup="true">Evidence <span class="chev"></span></button>
+        <div class="dropdown-panel">
+          <a href="testimonials.html"><strong>Testimonials</strong><span>In parents' words</span></a>
+          <a href="qualifications.html"><strong>Qualifications</strong><span>Training and credentials</span></a>
+          <a href="portfolio.html"><strong>Portfolio</strong><span>Materials and environments</span></a>
+          <a href="insights.html"><strong>Insights</strong><span>Articles and reflections</span></a>
+        </div>
+      </li>
+
+      <li><a href="contact.html">Contact</a></li>
+      <li class="nav-mobile-cta"><a href="private-portfolio.html" class="btn">Private Portfolio</a></li>
+    </ul>
+    <div class="nav-cta">
+      <div class="theme-toggle">
+        <button class="theme-toggle-btn" type="button" aria-label="Change theme" data-mode="auto">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
+        </button>
+        <span class="theme-label">Theme: Auto</span>
+      </div>
+      <a href="private-portfolio.html" class="btn btn-ghost">Private Portfolio</a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<!-- NAV:END -->
+<main id="main">
+  <section class="hero" style="padding-bottom: var(--sp-3);">
+    <div class="container">
+      <p class="eyebrow">Private &middot; Not indexed by search engines</p>
+      <h1 style="margin: var(--sp-2) 0 var(--sp-3);">Manage the Gallery</h1>
+      <p class="lede">Add or remove photos and videos from your private gallery. Changes appear immediately.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-narrow" style="text-align:center;" data-gate>
+      <div class="img-frame" style="aspect-ratio:16/9; margin-bottom: var(--sp-4);"><span>Secure access</span></div>
+      <form id="access-form" style="display:flex; flex-direction:column; gap: var(--sp-2); max-width:360px; margin:0 auto;">
+        <label for="access-password" style="text-align:left; font-size:0.85rem; font-weight:600;">Password</label>
+        <input type="password" id="access-password" required style="width:100%; padding:0.85em 1em; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius: var(--radius-sm);">
+        <button type="submit" class="btn" style="margin-top: var(--sp-2);"><span class="arrow">Sign in</span></button>
+        <div class="form-status" role="status" aria-live="polite" style="text-align:left;"></div>
+      </form>
+    </div>
+
+    <div class="container" data-gated hidden>
+      <div class="container-narrow">
+        <div class="upload-drop" id="upload-drop">
+          <input type="file" id="file-input" accept="image/*,video/*">
+          <p style="font-weight:600; margin-bottom:0.4em;">Tap to choose a photo or video</p>
+          <p style="font-size:0.85rem; color:var(--ink-soft);">or drag and drop it here</p>
+        </div>
+
+        <div id="upload-form" style="display:none; margin-top: var(--sp-4);">
+          <div class="field" style="margin-bottom: var(--sp-3);">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4em;">Caption</label>
+            <input type="text" id="caption-input" placeholder="e.g. Session materials, communication cards" style="width:100%; padding:0.85em 1em; border:1px solid var(--line); background:var(--surface); border-radius: var(--radius-sm);">
+          </div>
+          <div class="field" style="margin-bottom: var(--sp-3);">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.4em;">Category</label>
+            <select id="category-input" data-enhance>
+              <option value="photo">Photo</option>
+              <option value="video">Video</option>
+              <option value="notes">Progress notes</option>
+            </select>
+          </div>
+          <button class="btn" id="upload-btn"><span class="arrow">Upload</span></button>
+          <div class="progress-bar" id="progress-bar"><div class="progress-bar-fill" id="progress-fill"></div></div>
+          <div class="form-status" id="upload-status" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="container-narrow" style="margin-top: var(--sp-6);">
+        <div class="head-block"><p class="eyebrow">Current items</p><h2 style="font-size:1.6rem;">Everything in the gallery</h2></div>
+        <div id="manage-list"><p style="color:var(--ink-soft);">Loading…</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- FOOTER:START -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Jennifer Amaka</h4>
+        <p style="max-width: 32ch; opacity: 0.85;">Individual support for children and young people with autism, Down syndrome, developmental delays and learning difficulties. Based in Dubai, working with families across the UAE, Nigeria, and beyond.</p>
+        <p style="margin-top:0.8em; font-size:0.85rem; opacity:0.75;">Part of the team at <a href="https://btg-training.com" target="_blank" rel="noopener" style="text-decoration:underline;">Bridge The Gap</a></p>
+        <div class="social-row">
+          <a href="mailto:hello@jenniferamaka.com" class="social-icon" aria-label="Email" data-tip="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          </a>
+          <a href="https://wa.me/c/971543044578" class="social-icon" aria-label="WhatsApp" data-tip="WhatsApp" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.9a8.4 8.4 0 0 1-12.3 7.4L4 20.5l1.3-4a8.4 8.4 0 1 1 15.2-4.6Z"/><path d="M8.7 8.7c.2-.5.6-.5 1-.5h.4c.2 0 .4 0 .6.4.2.5.7 1.6.7 1.8.1.1.1.3 0 .5-.1.1-.1.3-.3.4l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.2 1.7 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.8.9-1 .2-.3.4-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.4.1.9-.1 1.3-.3.5-1.2.9-1.7 1-.5.1-1 .1-3.3-.7-2.8-1.1-4.6-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9 0-1.4.7-2 1-2.3Z" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://facebook.com/" class="social-icon" aria-label="Facebook" data-tip="Facebook" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5h2.5V5.3h-2.5c-2 0-3.5 1.6-3.5 3.6v2.1H8.5v3.2H10.5V20h3.2v-5.8h2.3l.5-3.2h-2.8V8.9c0-.3.3-.4.3-.4Z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="experience.html">Experience</a></li>
+          <li><a href="approach.html">Approach</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="specialisms.html">Specialisms</a></li>
+          <li><a href="results.html">Results</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Evidence</h4>
+        <ul>
+          <li><a href="case-studies.html">Case Studies</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="qualifications.html">Qualifications</a></li>
+          <li><a href="cv.html">CV</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="contact.html">Enquire</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="consent.html">Consent</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Jennifer Amaka. All rights reserved.</span>
+      <span>Images and case studies used with permission. See <a href="consent.html" style="text-decoration:underline;">Consent</a>.</span>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER:END -->
+<script src="js/nav.js"></script>
+<script src="js/premium.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/access-gate.js"></script>
+<script src="js/r2-config.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/gallery-admin.js"></script>
+</body>
+</html>
