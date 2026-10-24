@@ -82,7 +82,7 @@
         article.className = "tile";
         article.innerHTML = `
           <a href="article.html?slug=${a.slug}" style="text-decoration:none; color:inherit; display:block;">
-            <div class="img-frame"><img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixlib=rb-4.1.0&q=80&fm=jpg&crop=entropy&cs=tinysrgb&fit=max&w=1000" alt="Collection of books in soft focus" loading="lazy" decoding="async"></div>
+            <div class="img-frame"><img src="assets/images/unsplash/1497633762265-9d179a990aa6-w1000.jpg" alt="Collection of books in soft focus" loading="lazy" decoding="async"></div>
             <div class="tile-body">
               <p class="eyebrow" style="margin-bottom:0.4em;">${a.meta.category || ""} &middot; ${a.minutes} min read</p>
               <h3>${a.meta.title || a.slug}</h3>
@@ -116,7 +116,7 @@
           </div>
         </section>
         <section class="section-tight">
-          <div class="container"><div class="img-frame" style="aspect-ratio: 21/9;"><img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixlib=rb-4.1.0&q=80&fm=jpg&crop=entropy&cs=tinysrgb&fit=max&w=1600" alt="Collection of books in soft focus" loading="lazy" decoding="async"></div></div>
+          <div class="container"><div class="img-frame" style="aspect-ratio: 21/9;"><img src="assets/images/unsplash/1497633762265-9d179a990aa6-w1600.jpg" alt="Collection of books in soft focus" loading="lazy" decoding="async"></div></div>
         </section>
         <section class="section">
           <div class="container-narrow">${renderMarkdown(body)}</div>
