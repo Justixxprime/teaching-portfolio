@@ -9,7 +9,7 @@ Total setup: about 25 minutes, one time only. You'll deploy a second small Cloud
 2. Click **OAuth Apps → New OAuth App**.
 3. Fill in:
    - **Application name**: anything, e.g. "Alex Morgan Site CMS"
-   - **Homepage URL**: her live site URL, e.g. `https://YOUR-DOMAIN.com`
+   - **Homepage URL**: her live site URL, e.g. `https://justixxprime.github.io/teaching-portfolio`
    - **Authorization callback URL**: the Worker URL you'll get in Step 3, with `/callback` on the end — you can come back and edit this after Step 3 if you don't have it yet.
 4. Click **Register application**.
 5. Click **Generate a new client secret**. Copy both the **Client ID** and the **Client Secret** somewhere safe — you need both in Step 3.

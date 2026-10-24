@@ -58,7 +58,7 @@ It will ask you to type a value — enter any long, random string (20+ character
      adminKey: "YOUR-ADMIN-KEY-HERE",   // leave as is, the key is entered on the admin page instead
    };
    ```
-2. Open `workers/gallery-worker.js` and set the `ALLOWED_ORIGIN` constant near the top to the live site address (for example `https://alexmorgan.com`), then run `wrangler deploy` again from `workers/`.
+2. Open `workers/gallery-worker.js` and set the `ALLOWED_ORIGIN` constant near the top to the live site address (`https://justixxprime.github.io`, no path), then run `wrangler deploy` again from `workers/`.
 
 ## Step 7 — Test it
 1. Open `gallery-admin.html` on the live site.

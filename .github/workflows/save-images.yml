@@ -1,0 +1,23 @@
+# Saves every Unsplash photo used on the site into the repo (assets/images/unsplash/)
+# and switches the pages to the saved copies. Runs once automatically when this file
+# is pushed, and any time from the Actions tab (Run workflow). Safe to re-run.
+name: Save images into the repo
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/save-images.yml"
+permissions:
+  contents: write
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/download-images.py
+      - name: Commit saved images
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && echo "Nothing to commit" || (git commit -m "Save stock photos into the repo" && git push)

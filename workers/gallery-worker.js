@@ -15,7 +15,7 @@
  * See docs/r2-setup-guide.md for full deploy steps.
  */
 
-const ALLOWED_ORIGIN = "https://YOUR-DOMAIN.com"; // set to the live site address, e.g. https://alexmorgan.com
+const ALLOWED_ORIGIN = "https://justixxprime.github.io"; // the site origin (no path), required for uploads to work from GitHub Pages
 
 function cors(resp) {
   resp.headers.set("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
