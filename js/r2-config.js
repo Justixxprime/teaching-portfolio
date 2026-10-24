@@ -1,7 +1,7 @@
 /* ============================================================
    R2 GALLERY CONFIG
    Fill this in once the Worker is deployed (see
-   docs/r2-setup-guide-for-justice.md). The URL is your Worker's
+   docs/r2-setup-guide.md). The URL is your Worker's
    address; the admin key matches the ADMIN_KEY secret set on
    the Worker. Neither of these being "wrong" can expose the
    gallery publicly — the Worker itself enforces the real check.

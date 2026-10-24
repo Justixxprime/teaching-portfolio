@@ -1,10 +1,10 @@
 /**
  * decap-oauth-worker.js
  * A small, self-contained OAuth proxy so Decap CMS can log
- * Jennifer in with GitHub. GitHub Pages has no server of its
+ * Alex in with GitHub. GitHub Pages has no server of its
  * own to handle this step, so this Worker fills that one gap.
  * Deploy alongside gallery-worker.js — see
- * docs/decap-cms-setup-guide-for-justice.md for full steps.
+ * docs/decap-cms-setup-guide.md for full steps.
  */
 
 const GITHUB_AUTH_URL = "https://github.com/login/oauth/authorize";

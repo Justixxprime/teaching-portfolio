@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
           setTimeout(unlock, 400);
         } else {
           status.className = 'form-status error show';
-          status.textContent = 'Not correct. (Test mode password is "preview2026" until Supabase is connected.)';
+          status.textContent = 'Not correct. Please try again.';
           button.disabled = false;
           button.textContent = testLabel;
         }

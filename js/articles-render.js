@@ -2,7 +2,7 @@
    ARTICLES ENGINE — reads content/articles/*.md directly from
    GitHub (raw.githubusercontent.com) at runtime, no build step.
    This is what makes Decap CMS work on plain GitHub Pages:
-   Jennifer publishes through the CMS, which commits a markdown
+   Alex publishes through the CMS, which commits a markdown
    file to the repo, and it appears on the live site within
    moments, no rebuild or redeploy needed.
    ============================================================ */
@@ -82,7 +82,7 @@
         article.className = "tile";
         article.innerHTML = `
           <a href="article.html?slug=${a.slug}" style="text-decoration:none; color:inherit; display:block;">
-            <div class="img-frame"><span>Photography pending</span></div>
+            <div class="img-frame"><img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixlib=rb-4.1.0&q=80&fm=jpg&crop=entropy&cs=tinysrgb&fit=max&w=1000" alt="Collection of books in soft focus" loading="lazy" decoding="async"></div>
             <div class="tile-body">
               <p class="eyebrow" style="margin-bottom:0.4em;">${a.meta.category || ""} &middot; ${a.minutes} min read</p>
               <h3>${a.meta.title || a.slug}</h3>
@@ -106,7 +106,7 @@
     try {
       const { meta, body } = await fetchArticle(slug);
       const minutes = readTime(body);
-      document.title = `${meta.title} | Insights | Jennifer Amaka`;
+      document.title = `${meta.title} | Insights | Alex Morgan`;
       container.innerHTML = `
         <section class="hero" style="padding-bottom: var(--sp-3);">
           <div class="container-narrow">
@@ -116,7 +116,7 @@
           </div>
         </section>
         <section class="section-tight">
-          <div class="container"><div class="img-frame" style="aspect-ratio: 21/9;"><span>Photography pending</span></div></div>
+          <div class="container"><div class="img-frame" style="aspect-ratio: 21/9;"><img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixlib=rb-4.1.0&q=80&fm=jpg&crop=entropy&cs=tinysrgb&fit=max&w=1600" alt="Collection of books in soft focus" loading="lazy" decoding="async"></div></div>
         </section>
         <section class="section">
           <div class="container-narrow">${renderMarkdown(body)}</div>

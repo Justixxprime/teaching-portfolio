@@ -1,7 +1,7 @@
 /**
  * gallery-worker.js
  * Deploy this as a Cloudflare Worker bound to the R2 bucket.
- * Handles three things for Jennifer's private gallery:
+ * Handles three things for the owner's private gallery:
  *   POST /upload   — add a new photo/video + its caption/category
  *   GET  /list     — list everything currently in the gallery
  *   DELETE /delete — remove an item
@@ -9,13 +9,13 @@
  * Auth: every request must include a header
  *   X-Admin-Key: <the secret you set below as a Worker env var>
  * This key lives ONLY in the private upload page's local storage
- * after Jennifer logs in through the existing Supabase password
+ * after Alex logs in through the existing Supabase password
  * gate — it is never present in the public site's source code.
  *
- * See docs/r2-setup-guide-for-justice.md for full deploy steps.
+ * See docs/r2-setup-guide.md for full deploy steps.
  */
 
-const ALLOWED_ORIGIN = "https://jenniferamaka.com"; // update to her real domain
+const ALLOWED_ORIGIN = "https://YOUR-DOMAIN.com"; // set to the live site address, e.g. https://alexmorgan.com
 
 function cors(resp) {
   resp.headers.set("Access-Control-Allow-Origin", ALLOWED_ORIGIN);

@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
   var wrap = document.createElement('div');
   wrap.className = 'wa-float';
   wrap.innerHTML =
-    '<a href="https://wa.me/c/971543044578" target="_blank" rel="noopener" class="wa-float-btn" aria-label="Message Jennifer on WhatsApp">' +
+    '<a href="https://wa.me/2349133058119" target="_blank" rel="noopener" class="wa-float-btn" aria-label="Message Alex on WhatsApp">' +
       '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 11.9a8.4 8.4 0 0 1-12.3 7.4L4 20.5l1.3-4a8.4 8.4 0 1 1 15.2-4.6Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.7 8.7c.2-.5.6-.5 1-.5h.4c.2 0 .4 0 .6.4.2.5.7 1.6.7 1.8.1.1.1.3 0 .5-.1.1-.1.3-.3.4l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.2 1.7 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.8.9-1 .2-.3.4-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.4.1.9-.1 1.3-.3.5-1.2.9-1.7 1-.5.1-1 .1-3.3-.7-2.8-1.1-4.6-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9 0-1.4.7-2 1-2.3Z"/></svg>' +
     '</a>' +
-    '<span class="wa-float-label">Message Jennifer<br>on WhatsApp</span>';
+    '<span class="wa-float-label">Message Alex<br>on WhatsApp</span>';
   document.body.appendChild(wrap);
 });
 
@@ -18,8 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
    VIDEO CARDS — hover preview + click-to-open lightbox
    ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {
-  var cards = document.querySelectorAll('.video-card');
-  if (!cards.length) return;
+  // Handlers are delegated, so video cards added later (uploaded gallery
+  // items load after the page) work exactly like static ones.
+  if (!document.querySelector('.video-card, .gallery-grid')) return;
 
   var lightbox = document.createElement('div');
   lightbox.className = 'video-lightbox';
@@ -36,15 +37,38 @@ document.addEventListener('DOMContentLoaded', function () {
   lightbox.addEventListener('click', function (e) { if (e.target === lightbox) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 
-  cards.forEach(function (card) {
-    var previewVideo = card.querySelector('video');
-    card.addEventListener('mouseenter', function () { if (previewVideo) previewVideo.play().catch(function(){}); });
-    card.addEventListener('mouseleave', function () { if (previewVideo) previewVideo.pause(); });
-    card.addEventListener('click', function () {
-      lbVideo.src = card.getAttribute('data-video');
-      lightbox.classList.add('open');
-      lbVideo.play().catch(function(){});
-    });
+  function cardFrom(e) {
+    return e.target.closest ? e.target.closest('.video-card') : null;
+  }
+  function openCard(card) {
+    var src = card.getAttribute('data-video');
+    if (!src) return;
+    lbVideo.src = src;
+    lightbox.classList.add('open');
+    lbVideo.play().catch(function(){});
+  }
+  document.addEventListener('mouseover', function (e) {
+    var card = cardFrom(e);
+    if (!card || card.contains(e.relatedTarget)) return;
+    var v = card.querySelector('video');
+    if (v) v.play().catch(function(){});
+  });
+  document.addEventListener('mouseout', function (e) {
+    var card = cardFrom(e);
+    if (!card || card.contains(e.relatedTarget)) return;
+    var v = card.querySelector('video');
+    if (v) v.pause();
+  });
+  document.addEventListener('click', function (e) {
+    var card = cardFrom(e);
+    if (card) openCard(card);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var card = cardFrom(e);
+    if (!card) return;
+    e.preventDefault();
+    openCard(card);
   });
 });
 
@@ -213,7 +237,6 @@ if (document.readyState === 'complete') {
 document.addEventListener('DOMContentLoaded', function () {
   var filters = document.querySelectorAll('.gallery-filter');
   if (!filters.length) return;
-  var tiles = document.querySelectorAll('.gallery-grid .tile');
 
   filters.forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -221,7 +244,8 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.classList.add('is-active');
       btn.setAttribute('aria-selected', 'true');
       var wanted = btn.getAttribute('data-filter');
-      tiles.forEach(function (tile) {
+      // Looked up at click time so uploaded (late-loading) tiles are included.
+      document.querySelectorAll('.gallery-grid .tile').forEach(function (tile) {
         var show = wanted === 'all' || tile.getAttribute('data-category') === wanted;
         tile.classList.toggle('is-hidden', !show);
       });

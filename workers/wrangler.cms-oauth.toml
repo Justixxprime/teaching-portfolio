@@ -1,0 +1,9 @@
+# Article editor login proxy (Decap CMS + GitHub). Deploy from this folder with:
+#   wrangler deploy -c wrangler.cms-oauth.toml
+# Then set its two secrets:
+#   wrangler secret put GITHUB_CLIENT_ID    -c wrangler.cms-oauth.toml
+#   wrangler secret put GITHUB_CLIENT_SECRET -c wrangler.cms-oauth.toml
+# Full steps: docs/decap-cms-setup-guide.md
+name = "support-cms-oauth"
+main = "decap-oauth-worker.js"
+compatibility_date = "2026-01-01"

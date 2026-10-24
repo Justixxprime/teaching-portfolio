@@ -24,6 +24,15 @@
   pointer-events: none;
 }
 
+/* Filled frame: real photograph replaces the placeholder */
+.img-frame > img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.img-frame:has(> img) { padding: 0; border-color: transparent; }
+.img-frame:has(> img)::after { display: none; }
+
 /* ---- Hero ---- */
 .hero { padding: var(--sp-6) 0 var(--sp-5); }
 .hero-grid {

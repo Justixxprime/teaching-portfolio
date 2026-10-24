@@ -1,0 +1,12 @@
+# Gallery worker (photo/video uploads). Deploy from this folder with:
+#   wrangler deploy
+# Then set the admin key (never put it in a file):
+#   wrangler secret put ADMIN_KEY
+# Full steps: docs/r2-setup-guide.md
+name = "support-gallery-worker"
+main = "gallery-worker.js"
+compatibility_date = "2026-01-01"
+
+[[r2_buckets]]
+binding = "GALLERY_BUCKET"
+bucket_name = "support-gallery"   # must match the bucket you created in R2

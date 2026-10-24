@@ -1,14 +1,14 @@
-# Decap CMS config for Jennifer's Insights articles.
-# See docs/decap-cms-setup-guide-for-justice.md for the one-time
+# Decap CMS config for the owner's Insights articles.
+# See docs/decap-cms-setup-guide.md for the one-time
 # GitHub OAuth setup this needs before it will work.
 
 backend:
   name: github
-  repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME   # e.g. justixxprime/jennifer-amaka-site
+  repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME   # e.g. Justixxprime/teaching-portfolio
   branch: main
   base_url: https://YOUR-OAUTH-PROXY.example.com   # from the setup guide, Step 3
 
-# Jennifer edits everything through a simple form — no code, no
+# Alex edits everything through a simple form — no code, no
 # markdown syntax to learn, just a title box, a category dropdown,
 # and a rich text editor (bold, headings, images all have buttons).
 media_folder: "assets/images/articles"
